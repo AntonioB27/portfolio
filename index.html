@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Antonio Bečić Portfolio</title>
+<meta name="description" content="Antonio Bečić, Full-Stack & AI Engineer: RAG pipelines, tool-calling agents and full-stack products. Open to roles in Frankfurt.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body { margin: 0; } img { max-width: 100%; } [hidden] { display: none !important; }
+/* Layout: two columns. A sticky intro on the left (who, pitch, contact, nav);
+   the right column scrolls: about, experience, selected work, ask-my-CV, skills.
+   Palette: black and white with one deep green. */
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --line: #e2e5e1;
+  --fg: #0b0d0c;
+  --muted: #545b56;
+  --green: #14532d;        /* fills: buttons, active marks */
+  --green-ink: #14532d;    /* green used as text */
+  --green-soft: #e4eee8;   /* tinted chips */
+  --on-green: #ffffff;
+  --chip: #eef0ed;
+  --q-bg: #0b0d0c;         /* question bubbles */
+  --q-fg: #f2f4f2;
+  --logo-filter: none;     /* logos are black; dark themes flip them to white */
+  --sans: 'Geist', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0b0a; --surface: #121413; --line: #222724; --fg: #f2f4f2; --muted: #a0a8a3;
+    --green: #1d6b40; --green-ink: #7cc49a; --green-soft: #13261b; --on-green: #ffffff; --chip: #1a1d1b;
+    --q-bg: #1d6b40; --q-fg: #ffffff; --logo-filter: invert(1); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0b0a; --surface: #121413; --line: #222724; --fg: #f2f4f2; --muted: #a0a8a3;
+  --green: #1d6b40; --green-ink: #7cc49a; --green-soft: #13261b; --on-green: #ffffff; --chip: #1a1d1b;
+  --q-bg: #1d6b40; --q-fg: #ffffff; --logo-filter: invert(1); color-scheme: dark;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font: 400 17px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+::selection { background: var(--green); color: var(--on-green); }
+
+.wrap { max-width: 1200px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px));
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 80px; }
+
+/* ---------- left: intro ---------- */
+.side { position: sticky; top: 0; max-height: 100vh; max-height: 100dvh; overflow-y: auto; scrollbar-width: none; padding-block: 80px 40px; display: flex; flex-direction: column; gap: 32px; }
+.status { display: inline-flex; align-items: center; gap: 10px; font: 500 13px var(--sans); color: var(--muted); }
+.status i { width: 8px; height: 8px; border-radius: 50%; background: #2fa866; box-shadow: 0 0 0 0 rgba(47,168,102,.5); animation: ping 2.4s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 9px rgba(47,168,102,0); } 100% { box-shadow: 0 0 0 0 rgba(47,168,102,0); } }
+.side h1 { font: 700 clamp(42px, 5vw, 60px)/1.02 var(--sans); letter-spacing: -.035em; margin: 16px 0 10px; text-wrap: balance; }
+.side .role { font: 500 20px/1.3 var(--sans); letter-spacing: -.01em; margin: 0; }
+.side .pitch { color: var(--muted); max-width: 40ch; margin: 16px 0 0; }
+.where { font: 400 13px var(--mono); color: var(--muted); margin-top: 12px; }
+nav.toc { display: grid; gap: 2px; }
+nav.toc a { display: flex; align-items: center; gap: 14px; text-decoration: none; font: 500 14px var(--sans); color: var(--muted); padding: 6px 0; width: max-content; }
+nav.toc a::before { content: ""; height: 1px; width: 24px; background: currentColor; transition: width .25s ease, background .25s; }
+nav.toc a:hover, nav.toc a[aria-current="true"] { color: var(--fg); }
+nav.toc a[aria-current="true"]::before { width: 56px; height: 2px; background: var(--green-ink); }
+.contact { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.contact .mail { font: 400 14px var(--mono); user-select: all; }
+.btn { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font: 500 15px var(--sans); padding: 9px 16px; border-radius: 999px; background: var(--green); color: var(--on-green); text-decoration: none; transition: filter .2s; }
+.btn:hover { filter: brightness(1.12); }
+.btn.quiet { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px var(--line); }
+.btn.quiet:hover { box-shadow: inset 0 0 0 1px var(--fg); filter: none; }
+.btn svg { width: 16px; height: 16px; }
+.theme { all: unset; cursor: pointer; font: 400 13px var(--mono); color: var(--muted); width: max-content; }
+.theme:hover { color: var(--fg); }
+.btn:focus-visible, nav.toc a:focus-visible, .chip:focus-visible, .send:focus-visible, .theme:focus-visible, .job a:focus-visible { outline: 2px solid var(--green-ink); outline-offset: 3px; }
+
+/* ---------- right column ---------- */
+main { padding-block: 80px 96px; display: grid; gap: 112px; min-width: 0; }
+section { scroll-margin-top: 48px; min-width: 0; }
+.eyebrow { font: 500 13px var(--mono); color: var(--green-ink); margin: 0 0 16px; }
+h2.title { font: 600 32px/1.15 var(--sans); letter-spacing: -.025em; margin: 0 0 20px; text-wrap: balance; }
+.prose p { margin: 0 0 14px; color: var(--muted); max-width: 64ch; }
+.prose strong { color: var(--fg); font-weight: 600; }
+
+/* experience */
+.jobs { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.job { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 20px; padding: 20px; margin-inline: -20px; border-radius: 14px; transition: background .2s; }
+.job:hover { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+.when { font: 400 13px/1.9 var(--mono); color: var(--muted); }
+.logo { display: block; height: 26px; width: auto; max-width: 112px; margin-bottom: 10px; filter: var(--logo-filter); opacity: .92; }
+.logo.mark { height: 30px; }
+.now { display: inline-block; font: 500 11px var(--sans); color: var(--on-green); background: var(--green); padding: 1px 8px; border-radius: 999px; margin-top: 6px; }
+.job h3 { margin: 0; font: 600 18px/1.35 var(--sans); letter-spacing: -.01em; }
+.job h3 span { color: var(--green-ink); }
+.job p { margin: 6px 0 0; color: var(--muted); font-size: 16px; }
+.job ul.points { margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 16px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; padding: 0; list-style: none; }
+.tags li { font: 400 12px var(--mono); padding: 3px 10px; border-radius: 999px; background: var(--green-soft); color: var(--green-ink); }
+
+/* work */
+.cases { display: grid; gap: 20px; }
+.case { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 28px; display: grid; gap: 10px; min-width: 0; }
+.case.featured { background: var(--green); color: var(--on-green); border-color: transparent; gap: 14px; padding: 32px; }
+.case.featured p { color: rgba(255,255,255,.82); }
+.case.featured .tags li { background: rgba(255,255,255,.12); color: #fff; }
+.case.featured .btn { background: #ffffff; color: #0b2a18; }
+.case h3 { font: 600 26px/1.15 var(--sans); letter-spacing: -.02em; margin: 0; }
+.case p { margin: 0; color: var(--muted); }
+.label { font: 500 13px var(--mono); color: var(--muted); }
+.case.featured .label { color: rgba(255,255,255,.75); }
+.sources { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 4px; }
+.sources div { border-top: 1px solid rgba(255,255,255,.22); padding-top: 10px; font-size: 14px; line-height: 1.4; color: rgba(255,255,255,.88); }
+.sources b { display: block; font-weight: 600; color: #fff; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.pair .case { align-content: start; }
+
+/* screenshots in a light browser frame */
+.shot { display: block; border-radius: 10px; overflow: hidden; background: var(--chip); box-shadow: 0 0 0 1px var(--line), 0 18px 40px -24px rgba(0,0,0,.45); text-decoration: none; }
+.shot .bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: var(--chip); border-bottom: 1px solid var(--line); }
+.shot .bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.shot .bar span { margin-left: 8px; font: 400 11px var(--mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shot .view { overflow: hidden; aspect-ratio: 16 / 10; }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.shot:hover img { transform: scale(1.03); }
+.case.featured .shot { margin: 8px -32px -32px; border-radius: 12px 12px 0 0; box-shadow: 0 -1px 0 rgba(255,255,255,.08), 0 -20px 50px -30px rgba(0,0,0,.6); background: #0e1a13; }
+.case.featured .shot .bar { background: #0e1a13; border-color: rgba(255,255,255,.08); }
+.case.featured .shot .bar i { background: rgba(255,255,255,.18); }
+.case.featured .shot .bar span { color: rgba(255,255,255,.6); }
+.case.featured .shot .view { aspect-ratio: 16 / 9.4; }
+.pair .shot { margin-bottom: 8px; }
+
+/* ask my CV */
+.chat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.log { padding: 22px; display: grid; gap: 14px; max-height: 460px; overflow-y: auto; }
+.msg { max-width: 92%; padding: 12px 16px; border-radius: 14px; font-size: 16px; line-height: 1.55; }
+.msg.q { justify-self: end; background: var(--q-bg); color: var(--q-fg); border-bottom-right-radius: 4px; }
+.msg.a { background: var(--chip); color: var(--fg); border-bottom-left-radius: 4px; }
+.msg .src { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.msg .src span { font: 500 11px var(--mono); color: var(--green-ink); background: var(--green-soft); border-radius: 999px; padding: 2px 9px; }
+.typing { display: inline-flex; gap: 4px; }
+.typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: dot 1s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 50% { opacity: .2; } }
+.suggest { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 22px 16px; }
+.chip { all: unset; cursor: pointer; font: 400 14px var(--sans); padding: 6px 13px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); color: var(--fg); }
+.chip:hover { box-shadow: inset 0 0 0 1px var(--green-ink); color: var(--green-ink); }
+.ask { display: flex; gap: 10px; padding: 14px; border-top: 1px solid var(--line); }
+.ask input { flex: 1; min-width: 0; font: 400 16px var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 11px 16px; }
+.ask input:focus { outline: 2px solid var(--green-ink); outline-offset: 0; }
+.send { all: unset; cursor: pointer; font: 500 15px var(--sans); padding: 0 20px; border-radius: 999px; background: var(--green); color: var(--on-green); }
+.note { font: 400 13px var(--mono); color: var(--muted); margin: 12px 0 0; }
+
+/* skills */
+.skills { display: grid; grid-template-columns: max-content 1fr; gap: 14px 28px; margin: 0; }
+.skills dt { font: 500 13px var(--mono); color: var(--muted); padding-top: 4px; }
+.skills dd { margin: 0; }
+.skills .tags { margin: 0; }
+.skills .tags li { background: var(--chip); color: var(--fg); }
+
+footer.end { border-top: 1px solid var(--line); padding-top: 28px; display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; justify-content: space-between; color: var(--muted); font-size: 15px; }
+
+@media (max-width: 980px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .side { position: static; max-height: none; overflow: visible; padding-block: 48px 8px; gap: 24px; }
+  nav.toc { display: none; }
+  main { padding-top: 56px; gap: 88px; }
+  .pair { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .job { grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 16px; margin-inline: -16px; }
+  .case, .case.featured { padding: 22px; }
+  .case.featured .shot { margin: 8px -22px -22px; }
+  .sources { grid-template-columns: minmax(0, 1fr); }
+  .skills { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .skills dd { margin-bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .status i, .typing i { animation: none; } .job, nav.toc a::before, .shot img { transition: none; } .shot:hover img { transform: none; } }
+</style>
+
+<div class="wrap">
+  <header class="side">
+    <div>
+      <div class="status"><i></i>Open to roles in Frankfurt</div>
+      <h1>Antonio Bečić</h1>
+      <p class="role">Full-Stack &amp; AI Engineer</p>
+      <p class="pitch">I build RAG pipelines, tool-calling agents and the full-stack products around them. Three years at Ericsson; now AI engineering at Pencilrec and full-stack work at NEOGOV.</p>
+      <div class="where">Split, Croatia · open to relocating</div>
+    </div>
+    <div class="contact">
+      <a class="btn quiet" href="https://github.com/AntonioB27" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>GitHub</a>
+      <span class="mail" id="mail">becicantonio27@gmail.com</span>
+      <button class="btn" type="button" id="copy">Copy email</button>
+    </div>
+    <nav class="toc" aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#work">Work</a>
+      <a href="#ask">Ask my CV</a>
+      <a href="#skills">Skills</a>
+    </nav>
+    <button class="theme" type="button" id="theme" aria-label="Switch colour theme">Theme: auto</button>
+  </header>
+
+  <main>
+    <section id="about" class="prose" aria-labelledby="about-h">
+      <p class="eyebrow">About</p>
+      <h2 class="title" id="about-h">I like software that answers real questions.</h2>
+      <p>At <strong>Pencilrec</strong> I build LLM features that work from a company's own documents: ingestion, chunking, embeddings and pgvector retrieval, grounded answers from OpenAI, Azure OpenAI and Claude, and agents that call tools to finish multi-step work. In parallel I build full-stack features for <strong>NEOGOV</strong>'s public-sector HR platform in React, TypeScript and C#/.NET.</p>
+      <p>Before that I spent three years at <strong>Ericsson Nikola Tesla</strong> in Split as a developer and team lead on telecom and cloud systems, and taught programming labs at my university. This year my team won the <strong>AIW 2026 Hackathon</strong> by AI Hub Frankfurt.</p>
+    </section>
+
+    <section id="experience" aria-labelledby="exp-h">
+      <p class="eyebrow">Experience</p>
+      <h2 class="title" id="exp-h">Where I've worked</h2>
+      <ol class="jobs">
+        <li class="job">
+          <div class="when"><img class="logo mark" src="logos/pencilrec.png" alt="Pencilrec logo" width="30" height="30">08/2026 – now<br><span class="now">Current</span></div>
+          <div>
+            <h3>AI Engineer · <span>Pencilrec</span></h3>
+            <p>LLM applications that answer from real documents and take real actions. Remote.</p>
+            <ul class="points"><li>RAG pipelines in Python/FastAPI: ingestion, chunking, embeddings, pgvector retrieval on Supabase</li><li>Tool-calling agents that automate multi-step workflows over internal data and APIs</li><li>Prompts, structured outputs and LLM-based evaluation</li></ul>
+            <ul class="tags"><li>Python</li><li>FastAPI</li><li>OpenAI / Azure OpenAI</li><li>Claude</li><li>pgvector</li><li>Supabase</li></ul>
+          </div>
+        </li>
+        <li class="job">
+          <div class="when"><img class="logo" src="logos/neogov.svg" alt="NEOGOV logo" width="104" height="16" style="height:16px;margin-block:7px 17px">08/2026 – now<br><span class="now">Current</span></div>
+          <div>
+            <h3>Full-Stack Developer · <span>NEOGOV</span></h3>
+            <p>Features end to end on an HR and workforce SaaS platform for the public sector. Remote, in parallel with Pencilrec.</p>
+            <ul class="points"><li>React + TypeScript frontends; C#/.NET and Node.js backend services</li><li>SQL Server / PostgreSQL data models, code reviews and production support</li></ul>
+            <ul class="tags"><li>React</li><li>TypeScript</li><li>C# / .NET</li><li>Node.js</li><li>SQL Server</li><li>PostgreSQL</li></ul>
+          </div>
+        </li>
+        <li class="job">
+          <div class="when"><img class="logo mark" src="logos/ericsson.svg" alt="Ericsson logo" width="30" height="30">03/2023 – 04/2026</div>
+          <div>
+            <h3>Software Developer &amp; Team Lead · <span>Ericsson Nikola Tesla</span></h3>
+            <p>Three years on cloud infrastructure and telecom systems in Split.</p>
+            <ul class="points"><li>Led a developer team: sprint planning, code reviews, cross-team communication (SAFe)</li><li>Automated test suites that raised regression coverage and cut manual testing</li><li>QA workflows that made CI/CD pipelines more reliable; components in Java, C++ and Erlang</li></ul>
+            <ul class="tags"><li>Java</li><li>C++</li><li>Erlang</li><li>Kubernetes</li><li>Docker</li><li>CI/CD</li></ul>
+          </div>
+        </li>
+        <li class="job">
+          <div class="when"><img class="logo mark" src="logos/oss.svg" alt="University Department of Professional Studies, Split, logo" width="31" height="30">2023 – 2024</div>
+          <div>
+            <h3>Demonstrator · <span>University Department of Professional Studies</span></h3>
+            <p>Taught Object-Oriented Programming and Web Development labs for 50+ students per semester: grading, lab material and one-on-one mentoring.</p>
+          </div>
+        </li>
+        <li class="job">
+          <div class="when"><img class="logo mark" src="logos/oss.svg" alt="University Department of Professional Studies, Split, logo" width="31" height="30">10/2021 – 09/2024</div>
+          <div>
+            <h3>Professional Bachelor in Computing · <span>University Department of Professional Studies, Split</span></h3>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="work" aria-labelledby="work-h">
+      <p class="eyebrow">Selected work</p>
+      <h2 class="title" id="work-h">Things I built and shipped</h2>
+      <div class="cases">
+        <article class="case featured">
+          <span class="label">Winner · AIW 2026 Hackathon · AI Hub Frankfurt</span>
+          <h3>Frankfurt Forecast</h3>
+          <p>A weather operations dashboard for Frankfurt Airport. For each runway it checks live wind against departure limits, forecasts when tailwind or gusts will cause a restriction, and flags the flights in that window for review. Built with my team at the AI Hub Frankfurt hackathon.</p>
+          <div class="sources">
+            <div><b>DWD station</b>Live wind and gust observations</div>
+            <div><b>METAR / TAF</b>Latest airport weather reports</div>
+            <div><b>ICON model</b>15-minute forecast samples up to 48 hours</div>
+          </div>
+          <div class="links"><a class="btn" href="https://fra-operations-forecast.vercel.app" target="_blank" rel="noopener">Open Frankfurt Forecast ↗</a></div>
+          <a class="shot" href="https://fra-operations-forecast.vercel.app" target="_blank" rel="noopener" aria-label="Open Frankfurt Forecast">
+            <div class="bar"><i></i><i></i><i></i><span>fra-operations-forecast.vercel.app</span></div>
+            <div class="view"><img src="shots/frankfurt-forecast.jpg" width="1600" height="1200" loading="lazy" alt="Frankfurt Forecast dashboard: wind limits and restriction outlook for runway 18, a tailwind forecast chart and a satellite map of the airport"></div>
+          </a>
+        </article>
+        <div class="pair">
+          <article class="case">
+            <a class="shot" href="https://calisto-events.com" target="_blank" rel="noopener" aria-label="Open calisto-events.com">
+              <div class="bar"><i></i><i></i><i></i><span>calisto-events.com</span></div>
+              <div class="view"><img src="shots/calisto.jpg" width="1600" height="1000" loading="lazy" alt="Calisto website: a dark landing page with the headline about never missing a memory and an event creation form"></div>
+            </a>
+            <span class="label">Launched 2025 · Solo founder</span>
+            <h3>Calisto</h3>
+            <p>Event photo sharing for weddings and birthdays. Guests add photos to one shared album. iOS and Android apps in React Native, a web app and a Supabase backend.</p>
+            <ul class="tags"><li>React Native</li><li>Web</li><li>Supabase</li></ul>
+            <div class="links"><a class="btn quiet" href="https://calisto-events.com" target="_blank" rel="noopener">calisto-events.com ↗</a></div>
+          </article>
+          <article class="case">
+            <a class="shot" href="https://github.com/AntonioB27/Sport4You" target="_blank" rel="noopener" aria-label="Open Sport4You on GitHub">
+              <div class="bar"><i></i><i></i><i></i><span>Sport4You · dashboard</span></div>
+              <div class="view"><img src="shots/sport4you.jpg" width="1600" height="925" loading="lazy" alt="Sport4You dashboard: player level and points, daily missions, rankings, a duel and the AI Coach entry"></div>
+            </a>
+            <span class="label">206 tests · AI Coach on Claude</span>
+            <h3>Sport4You</h3>
+            <p>Fitness gamification with an AI Coach powered by Claude. ASP.NET Core 8 backend and an Angular 17 frontend.</p>
+            <ul class="tags"><li>ASP.NET Core 8</li><li>Angular 17</li><li>Claude API</li></ul>
+            <div class="links"><a class="btn quiet" href="https://github.com/AntonioB27/Sport4You" target="_blank" rel="noopener">Code on GitHub ↗</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="ask" aria-labelledby="ask-h">
+      <p class="eyebrow">Ask my CV</p>
+      <h2 class="title" id="ask-h">Ask anything about my experience</h2>
+      <div class="chat">
+        <div class="log" id="log" aria-live="polite"></div>
+        <div class="suggest" id="suggest"></div>
+        <form class="ask" id="askForm">
+          <input id="q" name="q" type="text" autocomplete="off" placeholder="For example: have you led a team?" aria-label="Ask a question about Antonio's experience">
+          <button class="send" type="submit">Ask</button>
+        </form>
+      </div>
+      <p class="note">Answers are retrieved from my CV and quoted with their source. Nothing is made up.</p>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-h">
+      <p class="eyebrow">Skills</p>
+      <h2 class="title" id="skills-h">Toolbox</h2>
+      <dl class="skills">
+        <dt>AI</dt><dd><ul class="tags"><li>RAG</li><li>pgvector</li><li>Embeddings</li><li>Tool-calling agents</li><li>LLM evaluation</li><li>OpenAI / Azure OpenAI</li><li>Claude</li></ul></dd>
+        <dt>Languages</dt><dd><ul class="tags"><li>Python</li><li>TypeScript</li><li>JavaScript</li><li>C#</li><li>Java</li><li>C++</li><li>SQL</li></ul></dd>
+        <dt>Frameworks</dt><dd><ul class="tags"><li>React</li><li>React Native</li><li>Angular</li><li>FastAPI</li><li>Node.js</li><li>ASP.NET Core</li><li>Spring Boot</li></ul></dd>
+        <dt>Platform</dt><dd><ul class="tags"><li>Supabase</li><li>PostgreSQL</li><li>SQL Server</li><li>Docker</li><li>Kubernetes</li><li>CI/CD</li></ul></dd>
+        <dt>Spoken</dt><dd><ul class="tags"><li>Croatian · native</li><li>English · C1</li><li>German · B1</li></ul></dd>
+      </dl>
+    </section>
+
+    <footer class="end">
+      <span>Looking for my next full-stack or AI role in Frankfurt.</span>
+      <a class="btn" href="#ask">Ask my CV</a>
+    </footer>
+  </main>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- ask my CV: retrieval over CV passages, answers are quoted with their source ---------- */
+const DOCS = [
+  { src: 'Summary', text: 'Full-Stack & AI Engineer. I do AI engineering at Pencilrec (RAG, LLM agents, prompting and evaluation in Python and TypeScript) alongside full-stack work at NEOGOV. Before that I spent 3 years at Ericsson as a Software Developer & Team Lead.' },
+  { src: 'Pencilrec', text: 'AI Engineer at Pencilrec since 08/2026, remote. I build RAG pipelines for document search in Python/FastAPI: ingestion, chunking, embeddings and pgvector retrieval on Supabase, grounding answers from OpenAI / Azure OpenAI and Claude models. I develop LLM agents with tool calling that automate multi-step workflows over internal data and APIs, and I work on prompts, structured outputs and LLM-based evaluation.' },
+  { src: 'NEOGOV', text: 'Full-Stack Developer at NEOGOV since 08/2026, remote, in parallel with Pencilrec. I build features end to end for an HR and workforce SaaS platform for the public sector: React + TypeScript frontends, C#/.NET and Node.js backend services, SQL Server / PostgreSQL data models, code reviews and production support.' },
+  { src: 'Ericsson', text: 'Software Developer & Team Lead at Ericsson Nikola Tesla in Split, 03/2023 – 04/2026. I led a developer team: sprint planning, code reviews and cross-team communication (SAFe). I automated test suites that raised regression coverage and cut manual testing, built QA workflows that made CI/CD pipelines more reliable, and wrote components in Java, C++ and Erlang, working with Kubernetes and Docker.' },
+  { src: 'Teaching', text: 'Demonstrator (teaching assistant) at the University Department of Professional Studies in Split, 2023 – 2024. I taught Object-Oriented Programming and Web Development labs for 50+ students per semester, with grading, lab material and one-on-one mentoring.' },
+  { src: 'Education', text: 'Professional Bachelor in Computing from the University Department of Professional Studies in Split, 10/2021 – 09/2024.' },
+  { src: 'Hackathon', text: 'Winner of the AIW 2026 Hackathon by AI Hub Frankfurt. With my team I built Frankfurt Forecast, a weather operations dashboard for Frankfurt Airport. For each runway it checks live wind against departure limits, forecasts tailwind and gust restrictions up to 48 hours ahead and flags the flights in that window for review, using DWD station observations, METAR/TAF reports and the ICON weather model. It is live at fra-operations-forecast.vercel.app.' },
+  { src: 'Calisto', text: 'Calisto (calisto-events.com) is an event photo-sharing app for weddings and birthdays, launched in 2025. I am the solo founder and developer: React Native apps for iOS and Android, a web app and a Supabase backend.' },
+  { src: 'Sport4You', text: 'Sport4You is a fitness gamification app with a Claude-powered AI Coach: ASP.NET Core 8 backend, Angular 17 frontend and 206 tests. The code is on GitHub at AntonioB27/Sport4You.' },
+  { src: 'Languages', text: 'Spoken languages: Croatian (native), English (C1) and German (B1).' },
+  { src: 'Skills', text: 'Programming languages: Python, TypeScript, JavaScript, C#, Java, C++ and SQL. Frameworks: React, React Native, Angular, FastAPI, Node.js, ASP.NET Core and Spring Boot. AI: RAG, pgvector, embeddings, OpenAI / Azure OpenAI, Claude, tool-calling agents and evaluation.' },
+  { src: 'Availability', text: 'I am based in Split, Croatia, open to relocating to Frankfurt am Main and looking for my next full-stack or AI engineering role there. Email becicantonio27@gmail.com, GitHub AntonioB27.' }
+];
+const STOP = new Set('a an and are as at be by can could did do does for from have has how i in is it its me my of on or tell the to was what when where which who why with you your about any ever there they this that'.split(' '));
+// Words a recruiter uses → words the CV uses.
+const SYN = { rag: 'pipelines retrieval pgvector chunking', ai: 'llm rag agents', llm: 'rag agents', genai: 'llm rag', gpt: 'openai', chatgpt: 'openai', lead: 'led team', leadership: 'led team', manage: 'led team', manager: 'led team', team: 'led',
+  teach: 'teaching demonstrator labs', mentor: 'mentoring', german: 'languages', deutsch: 'german', speak: 'languages', language: 'languages spoken', english: 'languages',
+  relocate: 'relocating frankfurt', move: 'relocating', frankfurt: 'relocating', located: 'based', live: 'based', where: 'based', contact: 'email', email: 'email', hire: 'role', available: 'looking',
+  hackathon: 'winner', weather: 'wind forecast', wind: 'tailwind runway', runway: 'runway', award: 'winner hackathon', win: 'winner', won: 'winner', prize: 'winner', frontend: 'react typescript', backend: 'fastapi node .net services', fullstack: 'full-stack',
+  cloud: 'kubernetes docker', devops: 'ci/cd kubernetes', test: 'tests regression', testing: 'tests regression qa', mobile: 'react native ios android', app: 'apps', degree: 'bachelor', study: 'bachelor', university: 'bachelor demonstrator',
+  education: 'bachelor', vector: 'pgvector embeddings', retrieval: 'rag pgvector', agent: 'agents tool', project: 'calisto sport4you frankfurt', projects: 'calisto sport4you frankfurt', side: 'calisto sport4you', startup: 'founder', founder: 'founder', claude: 'claude', experience: 'years', years: 'years' };
+const tok = (s) => s.toLowerCase().replace(/[^a-z0-9#./+-]+/g, ' ').split(' ').map((w) => w.replace(/[.,]+$/, '')).filter((w) => w && !STOP.has(w)).map((w) => (w.length > 4 && w.endsWith('s') && !w.endsWith('ss') ? w.slice(0, -1) : w));
+const index = DOCS.map((d) => new Set(tok(d.text + ' ' + d.src)));
+const df = {}; index.forEach((set) => set.forEach((w) => (df[w] = (df[w] || 0) + 1)));
+const idf = (w) => Math.log(1 + DOCS.length / (df[w] || DOCS.length * 4));
+function retrieve(q) {
+  const base = tok(q), terms = new Set(base);
+  base.forEach((w) => (SYN[w] || '').split(' ').forEach((s) => s && tok(s).forEach((t) => terms.add(t))));
+  const scored = index.map((set, i) => { let s = 0; terms.forEach((w) => { if (set.has(w)) s += idf(w) * (base.includes(w) ? 1.4 : 1); }); return { i, s }; }).sort((a, b) => b.s - a.s);
+  return scored.filter((r, k) => r.s > 1.2 && (k === 0 || r.s >= scored[0].s * .7)).slice(0, 2).map((r) => DOCS[r.i]);
+}
+const log = $('log');
+function bubble(cls, html) { const b = document.createElement('div'); b.className = `msg ${cls}`; b.innerHTML = html; log.appendChild(b); log.scrollTop = log.scrollHeight; return b; }
+async function answer(q, instant = false) {
+  bubble('q', esc(q));
+  const hits = retrieve(q);
+  const text = hits.length ? hits.map((h) => h.text).join(' ') : "That isn't in my CV. Email me at becicantonio27@gmail.com and I'll answer it myself.";
+  const b = bubble('a', instant ? '' : '<span class="typing" aria-label="Answering"><i></i><i></i><i></i></span>');
+  if (!instant && !reduced) await new Promise((r) => setTimeout(r, 450));
+  const p = document.createElement('div'); b.replaceChildren(p);
+  if (instant || reduced) p.textContent = text;
+  else { const words = text.split(' '); for (let k = 0; k < words.length; k++) { p.textContent = words.slice(0, k + 1).join(' '); log.scrollTop = log.scrollHeight; await new Promise((r) => setTimeout(r, 16)); } }
+  if (hits.length) { const s = document.createElement('div'); s.className = 'src'; s.innerHTML = hits.map((h) => `<span>CV · ${esc(h.src)}</span>`).join(''); b.appendChild(s); }
+  log.scrollTop = log.scrollHeight;
+}
+const SUGGEST = ['What do you build with LLMs?', 'Have you led a team?', 'Tell me about the hackathon', 'Which languages do you speak?', 'Would you move to Frankfurt?'];
+SUGGEST.forEach((s) => { const c = document.createElement('button'); c.type = 'button'; c.className = 'chip'; c.textContent = s; c.addEventListener('click', () => answer(s)); $('suggest').appendChild(c); });
+bubble('a', 'Hi, I answer from Antonio’s CV and show where each answer comes from. Try a question below.');
+answer('What do you build with LLMs?', true);
+$('askForm').addEventListener('submit', (e) => { e.preventDefault(); const q = $('q').value.trim(); if (!q) return; $('q').value = ''; answer(q); });
+
+/* ---------- nav, theme, contact ---------- */
+const links = [...document.querySelectorAll('nav.toc a')];
+const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+  if (en.isIntersecting) links.forEach((a) => a.setAttribute('aria-current', a.getAttribute('href') === '#' + en.target.id));
+}), { rootMargin: '-35% 0px -60% 0px' });
+document.querySelectorAll('main section').forEach((s) => io.observe(s));
+
+// auto → light → dark, remembered per viewer when storage is available
+const MODES = ['auto', 'light', 'dark'];
+let mode = 'auto';
+try { mode = localStorage.getItem('theme') || 'auto'; } catch {}
+function applyTheme() {
+  if (mode === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', mode);
+  $('theme').textContent = `Theme: ${mode}`;
+}
+$('theme').addEventListener('click', () => { mode = MODES[(MODES.indexOf(mode) + 1) % 3]; try { localStorage.setItem('theme', mode); } catch {} applyTheme(); });
+applyTheme();
+
+$('copy').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  try { await navigator.clipboard.writeText($('mail').textContent); btn.textContent = 'Copied'; }
+  catch { getSelection().selectAllChildren($('mail')); btn.textContent = 'Press ⌘C / Ctrl+C'; }
+  setTimeout(() => (btn.textContent = 'Copy email'), 2200);
+});
+</script>
+</html>
